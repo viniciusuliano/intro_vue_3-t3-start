@@ -4,7 +4,7 @@ app.component('product-display', {
           type: Boolean,
           required: true
         }
-      },
+    },
     template: 
       /*html*/ 
       `<div class="product-display">
@@ -35,11 +35,16 @@ app.component('product-display', {
               v-on:click="addToCart">
               Add to Cart
             </button>
+            
+            <button 
+              class="button" 
+              v-on:click="removeFromCart">
+              Remove Item
+            </button>
           </div>
         </div>
       </div>`,
-
-      data() {
+    data() {
         return {
             product: 'Socks',
             brand: 'Vue Mastery',
@@ -50,26 +55,30 @@ app.component('product-display', {
               { id: 2235, color: 'blue', image: './assets/images/socks_blue.jpg', quantity: 0 },
             ]
         }
-      },
-      methods: {
-          addToCart() {
-              this.cart += 1
-          },
-          updateVariant(index) {
-              this.selectedVariant = index
-          }
-      },
-      computed: {
-          title() {
-              return this.brand + ' ' + this.product
-          },
-          image() {
-              return this.variants[this.selectedVariant].image
-          },
-          inStock() {
-              return this.variants[this.selectedVariant].quantity
-          }
-      }
-    
-    })
-
+    },
+    methods: {
+        addToCart() {
+            this.$emit('add-to-cart', this.variants[this.selectedVariant].id)
+        },
+        removeFromCart() {
+            this.$emit('remove-from-cart', this.variants[this.selectedVariant].id)
+        },
+        updateVariant(index) {
+            this.selectedVariant = index
+        }
+    },
+    computed: {
+        title() {
+            return this.brand + ' ' + this.product
+        },
+        image() {
+            return this.variants[this.selectedVariant].image
+        },
+        inStock() {
+            return this.variants[this.selectedVariant].quantity > 0
+        },
+        shipping() {
+            return this.premium ? 'Free' : 'Shipping fee applies'
+        }
+    }
+})

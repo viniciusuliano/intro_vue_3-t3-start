@@ -9,5 +9,9 @@ const app = Vue.createApp({
             '20% poliéster']
        }
     },
-    methods: {}
+    methods: {
+        updateCart(id) {
+        this.cart.push(id)
+        }
+    }
  })
